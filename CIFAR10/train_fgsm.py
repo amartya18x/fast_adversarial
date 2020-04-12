@@ -151,7 +151,7 @@ def main():
                 output = model(
                     clamp(X + pgd_delta[:X.size(0)], lower_limit, upper_limit))
             robust_acc = (output.max(1)[1] == y).sum().item() / y.size(0)
-            if robust_acc - prev_robust_acc < -0.2:
+            if robust_acc - prev_robust_acc < -0.4:
                 break
             prev_robust_acc = robust_acc
             best_state_dict = copy.deepcopy(model.state_dict())
