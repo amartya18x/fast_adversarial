@@ -97,7 +97,11 @@ def main():
     # Training
     prev_robust_acc = 0.
     start_train_time = time.time()
-    logger.info('Epoch \t Seconds \t LR \t \t Train Loss \t Train Acc')
+    if args.early_stop:
+        logger.info(
+            'Epoch \t Seconds \t LR \t \t Train Loss \t Train Acc \t Robust Acc')
+    else:
+        logger.info('Epoch \t Seconds \t LR \t \t Train Loss \t Train Acc')
     for epoch in tqdm(range(args.epochs)):
         start_epoch_time = time.time()
         train_loss = 0
@@ -153,8 +157,15 @@ def main():
             best_state_dict = copy.deepcopy(model.state_dict())
         epoch_time = time.time()
         lr = scheduler.get_lr()[0]
-        logger.info('%d \t %.1f \t \t %.4f \t %.4f \t %.4f',
-                    epoch, epoch_time - start_epoch_time, lr, train_loss / train_n, train_acc / train_n)
+        if args.early_stop:
+            logger.info('%d \t %.1f \t \t %.4f \t %.4f \t %.4f \t %.4f',
+                        epoch, epoch_time - start_epoch_time, lr,
+                        train_loss / train_n, train_acc / train_n,
+                        robust_acc)
+        else:
+            logger.info('%d \t %.1f \t \t %.4f \t %.4f \t %.4f',
+                        epoch, epoch_time - start_epoch_time, lr,
+                        train_loss / train_n, train_acc / train_n)
     train_time = time.time()
     if not args.early_stop:
         best_state_dict = model.state_dict()
