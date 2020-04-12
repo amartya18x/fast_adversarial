@@ -75,7 +75,7 @@ def main():
                     loss_scale=args.loss_scale, verbosity=False)
     if args.opt_level == 'O2':
         amp_args['master_weights'] = args.master_weights
-    model, opt = amp.initialize(model, opt, **amp_args)
+    #model, opt = amp.initialize(model, opt, **amp_args)
     criterion = nn.CrossEntropyLoss()
 
     delta = torch.zeros(args.batch_size, 3, 32, 32).cuda()
@@ -103,8 +103,10 @@ def main():
                 output = model(X + delta[:X.size(0)])
                 loss = criterion(output, y)
                 opt.zero_grad()
-                with amp.scale_loss(loss, opt) as scaled_loss:
-                    scaled_loss.backward()
+                # with amp.scale_loss(loss, opt) as scaled_loss:
+                #    scaled_loss.backward()
+                loss.backward()
+
                 grad = delta.grad.detach()
                 delta.data = clamp(delta + epsilon *
                                    torch.sign(grad), -epsilon, epsilon)

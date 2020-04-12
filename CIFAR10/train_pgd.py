@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from preact_resnet import PreActResNet18
+from resnet import ResNet50
 from utils import (upper_limit, lower_limit, std, clamp, get_loaders,
                    evaluate_pgd, evaluate_standard)
 
@@ -71,7 +71,7 @@ def main():
     epsilon = (args.epsilon / 255.) / std
     alpha = (args.alpha / 255.) / std
 
-    model = PreActResNet18().cuda()
+    model = ResNet50().cuda()
     model.train()
 
     opt = torch.optim.SGD(model.parameters(), lr=args.lr_max,
@@ -122,8 +122,10 @@ def main():
             output = model(X + delta)
             loss = criterion(output, y)
             opt.zero_grad()
-            with amp.scale_loss(loss, opt) as scaled_loss:
-                scaled_loss.backward()
+            # with amp.scale_loss(loss, opt) as scaled_loss:
+            #    scaled_loss.backward()
+            loss.backward
+
             opt.step()
             train_loss += loss.item() * y.size(0)
             train_acc += (output.max(1)[1] == y).sum().item()
@@ -139,7 +141,7 @@ def main():
                 (train_time - start_train_time) / 60)
 
     # Evaluation
-    model_test = PreActResNet18().cuda()
+    model_test = ResNet50().cuda()
     model_test.load_state_dict(model.state_dict())
     model_test.float()
     model_test.eval()
