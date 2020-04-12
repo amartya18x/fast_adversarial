@@ -104,7 +104,7 @@ class ResNet_NLR(nn.Module):
         return out_final
 
 
-def ResNet18(args):
+def ResNet18():
     return ResNet_NLR(BasicBlock, [2, 2, 2, 2],
                       num_classes=10,
                       clamp=False)
@@ -114,7 +114,7 @@ def ResNet34():
     return ResNet_NLR(BasicBlock, [3, 4, 6, 3], num_classes=10)
 
 
-def ResNet50(args):
+def ResNet50():
     return ResNet_NLR(Bottleneck, [3, 4, 6, 3],
                       num_classes=10,
                       clamp=False)
