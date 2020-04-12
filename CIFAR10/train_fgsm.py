@@ -10,7 +10,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from apex import amp
 
-from preact_resnet import ResNet50
+from resnet import ResNet50
 from utils import (upper_limit, lower_limit, std, clamp, get_loaders,
                    attack_pgd, evaluate_pgd, evaluate_standard)
 
@@ -77,11 +77,11 @@ def main():
 
     opt = torch.optim.SGD(model.parameters(), lr=args.lr_max,
                           momentum=args.momentum, weight_decay=args.weight_decay)
-    amp_args = dict(opt_level=args.opt_level,
-                    loss_scale=args.loss_scale, verbosity=False)
-    if args.opt_level == 'O2':
-        amp_args['master_weights'] = args.master_weights
-    model, opt = amp.initialize(model, opt, **amp_args)
+    # amp_args = dict(opt_level=args.opt_level,
+    #                loss_scale=args.loss_scale, verbosity=False)
+    # if args.opt_level == 'O2':
+    #    amp_args['master_weights'] = args.master_weights
+    #model, opt = amp.initialize(model, opt, **amp_args)
     criterion = nn.CrossEntropyLoss()
 
     if args.delta_init == 'previous':
@@ -118,8 +118,10 @@ def main():
             delta.requires_grad = True
             output = model(X + delta[:X.size(0)])
             loss = F.cross_entropy(output, y)
-            with amp.scale_loss(loss, opt) as scaled_loss:
-                scaled_loss.backward()
+            # with amp.scale_loss(loss, opt) as scaled_loss:
+            #    scaled_loss.backward()
+            loss.backward()
+
             grad = delta.grad.detach()
             delta.data = clamp(
                 delta + alpha * torch.sign(grad), -epsilon, epsilon)
@@ -129,8 +131,10 @@ def main():
             output = model(X + delta[:X.size(0)])
             loss = criterion(output, y)
             opt.zero_grad()
-            with amp.scale_loss(loss, opt) as scaled_loss:
-                scaled_loss.backward()
+            # with amp.scale_loss(loss, opt) as scaled_loss:
+            #    scaled_loss.backward()
+            loss.backward()
+
             opt.step()
             train_loss += loss.item() * y.size(0)
             train_acc += (output.max(1)[1] == y).sum().item()
