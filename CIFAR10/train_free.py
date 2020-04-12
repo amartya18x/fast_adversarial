@@ -10,7 +10,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 #from preact_resnet import PreActResNet18
-from resnet import ResNet_NLR
+from resnet import ResNet50
 from utils import (upper_limit, lower_limit, std, clamp, get_loaders,
                    evaluate_pgd, evaluate_standard)
 
@@ -67,7 +67,7 @@ def main():
 
     epsilon = (args.epsilon / 255.) / std
 
-    model = ResNet_NLR().cuda()
+    model = ResNet50().cuda()
     model.train()
 
     opt = torch.optim.SGD(model.parameters(), lr=args.lr_max,
@@ -127,7 +127,7 @@ def main():
                 (train_time - start_train_time) / 60)
 
     # Evaluation
-    model_test = ResNet_NLR().cuda()
+    model_test = ResNet50().cuda()
     model_test.load_state_dict(model.state_dict())
     model_test.float()
     model_test.eval()

@@ -105,22 +105,9 @@ class ResNet_NLR(nn.Module):
 
 
 def ResNet18(args):
-    if args.rank_reg:
-        if args.num_lr == 1:
-            return ResNet_1LR(BasicBlock, [2, 2, 2, 2],
-                              num_classes=args.num_classes,
-                              clamp=args.clamp_inp,
-                              target_rank_1=args.target_rank_1)
-        elif args.num_lr == 2:
-            return ResNet_2LR(BasicBlock, [2, 2, 2, 2],
-                              num_classes=args.num_classes,
-                              clamp=args.clamp_inp,
-                              target_rank_1=args.target_rank_1,
-                              target_rank_2=args.target_rank_2)
-    else:
-        return ResNet_NLR(BasicBlock, [2, 2, 2, 2],
-                          num_classes=args.num_classes,
-                          clamp=args.clamp_inp)
+    return ResNet_NLR(BasicBlock, [2, 2, 2, 2],
+                      num_classes=10,
+                      clamp=False)
 
 
 def ResNet34():
@@ -128,22 +115,9 @@ def ResNet34():
 
 
 def ResNet50(args):
-    if args.rank_reg:
-        if args.num_lr == 1:
-            return ResNet_1LR(Bottleneck, [3, 4, 6, 3],
-                              num_classes=args.num_classes,
-                              clamp=args.clamp_inp,
-                              target_rank_1=args.target_rank_1)
-        elif args.num_lr == 2:
-            return ResNet_2LR(Bottleneck, [3, 4, 6, 3],
-                              num_classes=args.num_classes,
-                              clamp=args.clamp_inp,
-                              target_rank_1=args.target_rank_1,
-                              target_rank_2=args.target_rank_2)
-    else:
-        return ResNet_NLR(Bottleneck, [3, 4, 6, 3],
-                          num_classes=args.num_classes,
-                          clamp=args.clamp_inp)
+    return ResNet_NLR(Bottleneck, [3, 4, 6, 3],
+                      num_classes=10,
+                      clamp=False)
 
 
 def ResNet101():
