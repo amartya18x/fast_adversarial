@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from apex import amp
 
 from resnet import ResNet50
 from utils import (upper_limit, lower_limit, std, clamp, get_loaders,
