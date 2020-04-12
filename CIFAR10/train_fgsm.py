@@ -179,7 +179,7 @@ def main():
     model_test.float()
     model_test.eval()
     test_loss, test_acc = evaluate_standard(test_loader, model_test)
-    logger.info('Test Loss \t Test Acc \t eps \t steps\t PGD Loss \t PGD Acc')
+    logger.info('Test Loss \t Test Acc \t eps \t steps \t PGD Loss \t PGD Acc')
 
     for eps in [8, 10, 16, 255]:
         pgd_loss, pgd_acc = evaluate_pgd(test_loader, model_test, 20, 1)
