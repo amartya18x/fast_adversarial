@@ -12,7 +12,7 @@ import torch.nn.functional as F
 from resnet import ResNet50
 from utils import (upper_limit, lower_limit, std, clamp, get_loaders,
                    attack_pgd, evaluate_pgd, evaluate_standard)
-
+from tqdm import tqdm
 logger = logging.getLogger(__name__)
 
 
@@ -98,7 +98,7 @@ def main():
     prev_robust_acc = 0.
     start_train_time = time.time()
     logger.info('Epoch \t Seconds \t LR \t \t Train Loss \t Train Acc')
-    for epoch in range(args.epochs):
+    for epoch in tqdm(range(args.epochs)):
         start_epoch_time = time.time()
         train_loss = 0
         train_acc = 0
