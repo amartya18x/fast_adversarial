@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+from tqdm import tqdm
 #from preact_resnet import PreActResNet18
 from resnet import ResNet50
 from utils import (upper_limit, lower_limit, std, clamp, get_loaders,
@@ -92,7 +94,7 @@ def main():
     # Training
     start_train_time = time.time()
     logger.info('Epoch \t Seconds \t LR \t \t Train Loss \t Train Acc')
-    for epoch in range(args.epochs):
+    for epoch in tqdm(range(args.epochs)):
         start_epoch_time = time.time()
         train_loss = 0
         train_acc = 0
