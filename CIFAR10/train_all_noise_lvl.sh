@@ -28,4 +28,4 @@ conda activate /home/shug5742/miniconda3/envs/pytorch
 # Pass the bern noise level
 PARRAY=(8 10 16 20)
 p1=${PARRAY[`expr $SLURM_ARRAY_TASK_ID`]}
-python main.py --epsilon  $p1 --early-stop --epochs 350
+python train_fgsm.py --epsilon  $p1 --early-stop --epochs 350
