@@ -182,12 +182,14 @@ def main():
     logger.info(
         'Test Loss \t Test Acc \t eps \t \t steps \t PGD Loss \t PGD Acc')
 
-    for eps in [8, 10, 16, 20]:
-        pgd_loss, pgd_acc = evaluate_pgd(test_loader, model_test, 20, 1)
+    for eps in [10, 16, 20]:
+        pgd_loss, pgd_acc = evaluate_pgd(test_loader, model_test, 20, 1,
+                                         epsilon_args=eps)
         logger.info('%.4f \t \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f',
                     test_loss, test_acc, eps, 20, pgd_loss, pgd_acc)
 
-        pgd_loss, pgd_acc = evaluate_pgd(test_loader, model_test, 7, 1)
+        pgd_loss, pgd_acc = evaluate_pgd(test_loader, model_test, 7, 1,
+                                         epsilon_args=eps)
         logger.info('%.4f \t \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f',
                     test_loss, test_acc, eps, 7, pgd_loss, pgd_acc)
 
