@@ -151,7 +151,7 @@ def main():
                 output = model(
                     clamp(X + pgd_delta[:X.size(0)], lower_limit, upper_limit))
             robust_acc = (output.max(1)[1] == y).sum().item() / y.size(0)
-            if robust_acc - prev_robust_acc < -0.3:
+            if robust_acc - prev_robust_acc < -0.2:
                 break
             prev_robust_acc = robust_acc
             best_state_dict = copy.deepcopy(model.state_dict())
@@ -179,9 +179,10 @@ def main():
     model_test.float()
     model_test.eval()
     test_loss, test_acc = evaluate_standard(test_loader, model_test)
-    logger.info('Test Loss \t Test Acc \t eps \t steps \t PGD Loss \t PGD Acc')
+    logger.info(
+        'Test Loss \t Test Acc \t eps \t \t steps \t PGD Loss \t PGD Acc')
 
-    for eps in [8, 10, 16, 255]:
+    for eps in [8, 10, 16, 20]:
         pgd_loss, pgd_acc = evaluate_pgd(test_loader, model_test, 20, 1)
         logger.info('%.4f \t \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f',
                     test_loss, test_acc, eps, 20, pgd_loss, pgd_acc)
